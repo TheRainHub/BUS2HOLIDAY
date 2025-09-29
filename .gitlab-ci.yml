@@ -1,0 +1,49 @@
+stages:
+  - verify
+  - test
+  - build
+  - docker
+
+variables:
+  MAVEN_CLI_OPTS: "-B -e -U"
+  POSTGRES_DB: appdb
+  POSTGRES_USER: app
+  POSTGRES_PASSWORD: app
+
+services:
+  - name: postgres:15
+    alias: postgres
+
+verify:
+  stage: verify
+  image: maven:3.9.9-eclipse-temurin-21
+  script:
+    - mvn $MAVEN_CLI_OPTS validate
+    - mvn $MAVEN_CLI_OPTS compile
+
+test:
+  stage: test
+  image: maven:3.9.9-eclipse-temurin-21
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    reports:
+      junit: target/surefire-reports/TEST-*.xml
+
+build:
+  stage: build
+  image: maven:3.9.9-eclipse-temurin-21
+  script:
+    - mvn $MAVEN_CLI_OPTS package -DskipTests
+  artifacts:
+    paths:
+      - target/*.jar
+
+docker-build:
+  stage: docker
+  image: docker:25.0.3
+  services:
+    - docker:25.0.3-dind
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
