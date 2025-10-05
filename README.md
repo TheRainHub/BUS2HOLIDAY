@@ -1,27 +1,78 @@
-Enterprise Bus Transportation Management System (inspirace FlixBus)
-![img.png](img.png)
-Téma práce:
-Cílem semestrální práce je návrh a implementace podnikového informačního systému pro autobusovou dopravní společnost. Naším cílem je vyvijet vicevrstvou aplikace a zvýšit schopnosti a znalosti při návrhu a implementaci složitějšího informačního systému.
-Aplikace bude implementována jako čistě backendová REST API služba bez grafického rozhraní, a otestovana pomocí unit-testu a postmanu.
+# 🚍 Enterprise Bus Transportation Management System
+*(Inspired by FlixBus)*
 
-Systém bude fungovat jenom jako online platforma bez poboček. Uživatel zadává konkrétní parametry a počet cestujících osob, system zobrazí seznam dostupných jizd, uživatel zvoli cestu, systém zobrazí seznam volnych sedadel, uživatel zvoli sedadlo, a provede platbu.
-Hlavní funkce systému:
-Správa uživatelů a rolí - registrace, autentizace (JWT), autorizace podle role.
-Správa autobusů a tras - evidence vozidel, přidělení řidičů, definice tras a vzdáleností.
-Plánování jízd - vytváření a správa jednotlivých spojů s určením času odjezdu, příjezdu a kapacity.
-Vyhledávání spojů - filtrování podle města, data, ceny, dostupnosti.
-Rezervace a prodej jízdenek - nákup a zrušení jízdenek zákazníkem.
-Řidičský modul - přehled přidělených spojů a cestujících.
-Administrativní modul - reporty o vytížení spojů, prodejích a tržbách.
-Bezpečnostní vrstva - role-based přístup pomocí Spring Security (JWT).
-Cílovou skupinou uživatelů je administrátoři,řidiče, zakazniky(cestující)
+## 🎯 Téma práce
+Cílem této semestrální práce je **návrh a implementace podnikového informačního systému** pro autobusovou dopravní společnost.
+Projekt je zaměřen na tvorbu **vícevrstvé aplikace (enterprise-level)** s důrazem na:
+- návrh architektury backend systému,
+- použití moderních technologií,
+- bezpečnost a testování pomocí unit testů a Postman kolekcí.
 
-Role:
-Admin - hlavní role ktera spravuje a muže manipulovat s celym systemem, upravovat jine role, spravují trasy, autobusy, řidiče, a zrušovat objednavky uživatelům.
+Aplikace bude implementována jako **čistě backendová REST API služba** bez grafického rozhraní.
 
+---
 
-User - je uživatel který používá tento systém pro hledání, filtrování jizd podle zadaných parametrů, nakupu jizdenky a vyberu konkretniho sedadla ve autobusu, hradit rezervaci platbou, prohlížet své uplatněné a vystavené jízdenky, prohlížet detailní informace své konkrétní jízdenky, může zrušit jízdenku a vrátit peníze nejpozději za 15 min do začátku cesty.
-Pokud uživatel nepřihlášený, systém umožňuje prohlížet dostupná spojení podle nastavených filtru (odkud, kam, datum, počet cestujících). Při pokusu rezervace (výběru konkrétního spojení) uživatel je požádán o přihlášení / založení účtu.
+## ⚙️ Popis systému
+Systém simuluje funkce online platformy podobné FlixBus – bez fyzických poboček.
+Uživatel zadává parametry cesty (odkud, kam, datum, počet osob) → systém zobrazí seznam dostupných jízd → uživatel si vybere spoj → zvolí sedadlo → provede platbu.
 
+### Klíčové vlastnosti
+- Vícevrstvá architektura (Controller – Service – Repository – Entity)
+- Spring Boot REST API
+- Spring Security + JWT autentizace
+- Databáze: PostgreSQL
+- Testování: JUnit, Mockito
+- Dokumentace API: OpenAPI / Swagger
+- CI/CD (volitelné: GitLab CI, Docker)
 
-Driver - může upravovat a sledovat seznam cestujicih.
+---
+
+## 🧩 Hlavní funkce systému
+
+### 👤 Správa uživatelů a rolí
+- Registrace, přihlášení, JWT autentizace
+- Autorizace podle role (Admin / User / Driver)
+- Správa uživatelských dat
+
+### 🚌 Správa autobusů a tras
+- Evidence vozidel a jejich kapacit
+- Přidělení řidičů k autobusům
+- Definice tras, vzdáleností a zastávek
+
+### 🕓 Plánování jízd
+- Tvorba jednotlivých spojů (odjezd, příjezd, kapacita)
+- Úprava a mazání spojů
+- Zobrazení dostupnosti
+
+### 🔍 Vyhledávání spojů
+- Filtrování podle města, data, ceny, dostupnosti
+- Přehled nejbližších spojů
+
+### 🎟️ Rezervace a prodej jízdenek
+- Výběr sedadla
+- Nákup jízdenky a online platba
+- Zrušení jízdenky do 15 minut před odjezdem
+
+### 🚛 Řidičský modul
+- Přehled přidělených spojů
+- Seznam cestujících
+
+### 🧾 Administrativní modul
+- Přehled tržeb, obsazenosti a statistik
+- Správa uživatelů, tras a autobusů
+
+### 🔒 Bezpečnostní vrstva
+- Spring Security + JWT
+- Role-based access control (RBAC)
+
+---
+
+## 👥 Role v systému
+
+| Role | Popis |
+|------|--------|
+| **Admin** | Má plný přístup. Spravuje uživatele, role, trasy, autobusy, řidiče a objednávky. |
+| **User (Customer)** | Vyhledává jízdy, kupuje a ruší jízdenky, vybírá sedadla, sleduje své objednávky. |
+| **Driver** | Vidí seznam jízd, které mu byly přiděleny, a seznam cestujících. |
+
+---
