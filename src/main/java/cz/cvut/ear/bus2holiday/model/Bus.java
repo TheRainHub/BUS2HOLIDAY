@@ -3,6 +3,7 @@ package cz.cvut.ear.bus2holiday.model;
 import cz.cvut.ear.bus2holiday.model.enums.BusStatus;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "\"Bus\"")
+@Table(name = "bus")
 public class Bus extends BaseEntity {
 
     @Column(nullable = false, length = 100)
@@ -25,7 +26,7 @@ public class Bus extends BaseEntity {
     private String manufacturer;
 
     @Column(nullable = false)
-    private short year; // short для SMALLINT
+    private short year;
 
     @Column(name = "total_seats", nullable = false)
     private int totalSeats;
@@ -50,7 +51,7 @@ public class Bus extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "\"BusesOnRoutes\"",
+            name = "buses_on_routes",
             joinColumns = @JoinColumn(name = "bus_id"),
             inverseJoinColumns = @JoinColumn(name = "route_id"))
     private Set<Route> routes = new HashSet<>();

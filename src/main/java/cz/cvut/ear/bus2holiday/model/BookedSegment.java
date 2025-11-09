@@ -1,9 +1,10 @@
 package cz.cvut.ear.bus2holiday.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "\"BookedSegment\"")
+@Table(name = "booked_segment")
 public class BookedSegment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -16,6 +17,10 @@ public class BookedSegment extends BaseEntity {
 
     @Column(name = "seat_number", nullable = false, length = 10)
     private String seatNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "from_stop_id", nullable = false)
+    private RouteStop fromStop;
 
     @Column(name = "from_stop_order", nullable = false)
     private int fromStopOrder;
@@ -61,5 +66,13 @@ public class BookedSegment extends BaseEntity {
 
     public void setToStopOrder(int toStopOrder) {
         this.toStopOrder = toStopOrder;
+    }
+
+    public RouteStop getFromStop() {
+        return fromStop;
+    }
+
+    public void setFromStop(RouteStop fromStop) {
+        this.fromStop = fromStop;
     }
 }

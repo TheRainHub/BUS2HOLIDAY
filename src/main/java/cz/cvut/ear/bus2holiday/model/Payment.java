@@ -3,6 +3,7 @@ package cz.cvut.ear.bus2holiday.model;
 import cz.cvut.ear.bus2holiday.model.enums.PaymentStatus;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "\"Payment\"")
+@Table(name = "payment")
 public class Payment extends BaseEntity {
 
     @Column(nullable = false, precision = 10, scale = 2)

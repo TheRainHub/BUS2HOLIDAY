@@ -1,12 +1,13 @@
 package cz.cvut.ear.bus2holiday.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "\"ReservationPassenger\"")
+@Table(name = "reservation_passenger")
 public class ReservationPassenger extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

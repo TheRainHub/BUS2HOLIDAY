@@ -1,6 +1,7 @@
 package cz.cvut.ear.bus2holiday.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "\"Driver\"")
+@Table(name = "driver")
 public class Driver {
 
     @Id

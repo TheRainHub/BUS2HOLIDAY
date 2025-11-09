@@ -1,6 +1,7 @@
 package cz.cvut.ear.bus2holiday.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "\"Route\"")
+@Table(name = "route")
 public class Route extends BaseEntity {
 
     @Column(nullable = false, length = 255)

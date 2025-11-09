@@ -3,6 +3,7 @@ package cz.cvut.ear.bus2holiday.model;
 import cz.cvut.ear.bus2holiday.model.enums.UserRole;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "\"User\"")
+@Table(name = "\"user\"")
 public class User extends BaseEntity {
 
     @Column(nullable = false, unique = true, length = 255)
@@ -31,7 +32,7 @@ public class User extends BaseEntity {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "user_role")
+    @Column(name = "role", nullable = false, columnDefinition = "user_role")
     private UserRole role = UserRole.user;
 
     @CreationTimestamp

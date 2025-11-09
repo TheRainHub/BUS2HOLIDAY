@@ -1,12 +1,13 @@
 package cz.cvut.ear.bus2holiday.model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(
-        name = "\"RouteStop\"",
+        name = "route_stop",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"route_id", "sequence_order"})})
 public class RouteStop extends BaseEntity {
 
