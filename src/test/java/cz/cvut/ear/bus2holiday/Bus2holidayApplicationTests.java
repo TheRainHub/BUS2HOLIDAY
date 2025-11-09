@@ -9,7 +9,5 @@ import org.springframework.context.annotation.Import;
 class Bus2holidayApplicationTests {
 
     @Test
-    void contextLoads() {
-    }
-
+    void contextLoads() {}
 }
