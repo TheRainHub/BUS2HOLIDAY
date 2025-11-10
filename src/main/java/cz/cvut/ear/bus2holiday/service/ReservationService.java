@@ -9,6 +9,7 @@ import cz.cvut.ear.bus2holiday.model.enums.ReservationStatus;
 
 import jakarta.persistence.EntityNotFoundException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,8 @@ public class ReservationService {
         this.tripRepo = tripRepo;
         this.userRepo = userRepo;
     }
+
+    @Autowired private RouteStopRepository routeStopRepo;
 
     @Transactional
     public Reservation createReservation(ReservationRequest request) {
@@ -82,6 +85,12 @@ public class ReservationService {
         Set<ReservationPassenger> passengers = new HashSet<>();
 
         for (PassengerSeatRequest psr : request.passengers()) {
+            RouteStop fromStop =
+                    routeStopRepo
+                            .findByRouteIdAndSequenceOrder(
+                                    trip.getRoute().getId(), psr.fromStopOrder())
+                            .orElseThrow(() -> new EntityNotFoundException("RouteStop not found"));
+
             ReservationPassenger passenger = new ReservationPassenger();
             passenger.setReservation(savedReservation);
             passenger.setFirstName(psr.firstName());
@@ -94,6 +103,7 @@ public class ReservationService {
             segment.setSeatNumber(psr.seatNumber());
             segment.setFromStopOrder(psr.fromStopOrder());
             segment.setToStopOrder(psr.toStopOrder());
+            segment.setFromStop(fromStop);
             segmentRepo.save(segment);
 
             passengers.add(savedPassenger);

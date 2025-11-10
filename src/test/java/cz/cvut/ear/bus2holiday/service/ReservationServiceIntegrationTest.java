@@ -29,12 +29,15 @@ public class ReservationServiceIntegrationTest extends TestContainerConfig {
 
     @Autowired private UserRepository userRepo;
     @Autowired private TripRepository tripRepo;
-    @Autowired private RouteRepository routeRepo;
+    @Autowired private RouteRepository routeRepository;
     @Autowired private BusRepository busRepo;
     @Autowired private BookedSegmentRepository segmentRepo;
+    @Autowired private TerminalRepository terminalRepository;
+    @Autowired private RouteStopRepository routeStopRepository;
 
     private User testUser;
     private Trip testTrip;
+    private Route savedRoute;
 
     @BeforeEach
     void setUp() {
@@ -47,18 +50,85 @@ public class ReservationServiceIntegrationTest extends TestContainerConfig {
         testUser = userRepo.save(u);
 
         Bus bus = new Bus();
+        bus.setModel("Mercedes");
+        bus.setRegistrationNumber("1A2-3456");
+        bus.setManufacturer("Daimler");
+        bus.setYear((short) 2020);
         bus.setTotalSeats(50);
-        bus.setModel("TestBus");
-        bus.setRegistrationNumber("TEST-123");
         bus.setSeatLayout("{}");
         busRepo.save(bus);
 
         Route route = new Route();
         route.setName("Test Route");
-        routeRepo.save(route);
+        savedRoute = routeRepository.save(route);
+
+        Terminal terminal = new Terminal();
+        terminal.setName("Test Terminal");
+        terminal.setCity("Test City");
+        terminal.setCountry("Test Country");
+        terminal.setStreet("Test Street");
+        terminal.setBuildingNumber("1");
+        terminal.setPostcode("12345");
+        terminal.setLatitude(BigDecimal.valueOf(50.0));
+        terminal.setLongitude(BigDecimal.valueOf(14.0));
+        Terminal savedTerminal = terminalRepository.save(terminal);
+
+        RouteStop stop1 = new RouteStop();
+        stop1.setRoute(savedRoute);
+        stop1.setTerminal(savedTerminal);
+        stop1.setSequenceOrder(1);
+        stop1.setArrivalOffsetMinutes(0);
+        stop1.setDepartureOffsetMinutes(0);
+        stop1.setDistanceFromOrigin(BigDecimal.ZERO);
+        routeStopRepository.save(stop1);
+
+        RouteStop stop2 = new RouteStop();
+        stop2.setRoute(savedRoute);
+        stop2.setTerminal(savedTerminal);
+        stop2.setSequenceOrder(2);
+        stop2.setArrivalOffsetMinutes(60);
+        stop2.setDepartureOffsetMinutes(65);
+        stop2.setDistanceFromOrigin(BigDecimal.valueOf(100));
+        routeStopRepository.save(stop2);
+
+        RouteStop stop3 = new RouteStop();
+        stop3.setRoute(savedRoute);
+        stop3.setTerminal(savedTerminal);
+        stop3.setSequenceOrder(3);
+        stop3.setArrivalOffsetMinutes(120);
+        stop3.setDepartureOffsetMinutes(125);
+        stop3.setDistanceFromOrigin(BigDecimal.valueOf(200));
+        routeStopRepository.save(stop3);
+
+        RouteStop stop4 = new RouteStop();
+        stop4.setRoute(savedRoute);
+        stop4.setTerminal(savedTerminal);
+        stop4.setSequenceOrder(4);
+        stop4.setArrivalOffsetMinutes(180);
+        stop4.setDepartureOffsetMinutes(185);
+        stop4.setDistanceFromOrigin(BigDecimal.valueOf(300));
+        routeStopRepository.save(stop4);
+
+        RouteStop stop5 = new RouteStop();
+        stop5.setRoute(savedRoute);
+        stop5.setTerminal(savedTerminal);
+        stop5.setSequenceOrder(5);
+        stop5.setArrivalOffsetMinutes(240);
+        stop5.setDepartureOffsetMinutes(245);
+        stop5.setDistanceFromOrigin(BigDecimal.valueOf(400));
+        routeStopRepository.save(stop5);
+
+        RouteStop stop6 = new RouteStop();
+        stop6.setRoute(savedRoute);
+        stop6.setTerminal(savedTerminal);
+        stop6.setSequenceOrder(6);
+        stop6.setArrivalOffsetMinutes(300);
+        stop6.setDepartureOffsetMinutes(300);
+        stop6.setDistanceFromOrigin(BigDecimal.valueOf(500));
+        routeStopRepository.save(stop6);
 
         Trip t = new Trip();
-        t.setRoute(route);
+        t.setRoute(savedRoute);
         t.setBus(bus);
         t.setPrice(BigDecimal.valueOf(100));
         t.setDepartureDatetime(OffsetDateTime.now(ZoneOffset.UTC).plusDays(1));
@@ -90,6 +160,8 @@ public class ReservationServiceIntegrationTest extends TestContainerConfig {
                         testUser.getId(), testTrip.getId(), List.of(initialPassenger));
         reservationService.createReservation(initialRequest);
 
+        assertEquals(1, segmentRepo.count());
+
         PassengerSeatRequest overlappingPassenger =
                 new PassengerSeatRequest("Late", "Booker", "2A", 4, 6);
         ReservationRequest overlappingRequest =
@@ -107,17 +179,17 @@ public class ReservationServiceIntegrationTest extends TestContainerConfig {
 
     @Test
     void testCreateReservation_SuccessOnNonOverlappingSegment() {
-
         PassengerSeatRequest p1 = new PassengerSeatRequest("Anna", "First", "3B", 1, 3);
         ReservationRequest r1 =
                 new ReservationRequest(testUser.getId(), testTrip.getId(), List.of(p1));
         reservationService.createReservation(r1);
 
+        assertEquals(1, segmentRepo.count());
+
         PassengerSeatRequest p2 = new PassengerSeatRequest("Boris", "Second", "3B", 3, 5);
         ReservationRequest r2 =
                 new ReservationRequest(testUser.getId(), testTrip.getId(), List.of(p2));
 
-        Reservation reservation2 = null;
         assertDoesNotThrow(
                 () -> {
                     reservationService.createReservation(r2);

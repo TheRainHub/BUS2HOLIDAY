@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -24,7 +26,8 @@ public class Payment extends BaseEntity {
     private String transactionId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "payment_status")
+    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private PaymentStatus status = PaymentStatus.PENDING;
 
     @Column(name = "paid_at")
@@ -43,8 +46,9 @@ public class Payment extends BaseEntity {
     private User user;
 
     // @Type(type = "jsonb")
-    @Column(name = "gateway_response", nullable = false, columnDefinition = "jsonb")
-    private String gatewayResponse; // Пока просто String
+    @Column(name = "gateway_response", nullable = false)
+    @JdbcTypeCode(SqlTypes.JSON)
+    private String gatewayResponse;
 
     public BigDecimal getAmount() {
         return amount;

@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -40,6 +42,7 @@ public class Trip extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "trip_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private TripStatus status = TripStatus.SCHEDULED;
 
     @CreationTimestamp

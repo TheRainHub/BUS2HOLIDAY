@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -31,11 +33,13 @@ public class Bus extends BaseEntity {
     @Column(name = "total_seats", nullable = false)
     private int totalSeats;
 
-    @Column(name = "seat_layout", nullable = false, columnDefinition = "jsonb")
+    @Column(name = "seat_layout", nullable = false)
+    @JdbcTypeCode(SqlTypes.JSON)
     private String seatLayout;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "bus_status")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private BusStatus status = BusStatus.ACTIVE;
 
     @CreationTimestamp
