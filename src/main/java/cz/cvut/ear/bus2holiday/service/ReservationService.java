@@ -1,8 +1,8 @@
 package cz.cvut.ear.bus2holiday.service;
 
 import cz.cvut.ear.bus2holiday.dao.*;
-import cz.cvut.ear.bus2holiday.dto.PassengerSeatRequest;
-import cz.cvut.ear.bus2holiday.dto.ReservationRequest;
+import cz.cvut.ear.bus2holiday.dto.request.ReservationRequest;
+import cz.cvut.ear.bus2holiday.dto.response.PassengerSeatRequest;
 import cz.cvut.ear.bus2holiday.exception.SeatUnavailableException;
 import cz.cvut.ear.bus2holiday.model.*;
 import cz.cvut.ear.bus2holiday.model.enums.ReservationStatus;
